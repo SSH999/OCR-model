@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OCR Model</title>
+</head>
+<body>
+	<h1>OCR Model</h1>
+	<form action="/predict" method="post" enctype="multipart/form-data">
+		<label for="image">Upload an image:</label>
+		<input type="file" id="image" name="image"><br><br>
+		<input type="submit" value="Predict">
+	</form>
+
+	<div id="result"></div>
+
+	<script>
+		const form = document.querySelector('form');
+		const resultDiv = document.getElementById('result');
+
+		form.addEventListener('submit', e => {
+			e.preventDefault();
+
+			const formData = new FormData();
+			formData.append('image', document.getElementById('image').files[0]);
+
+			fetch('/predict', {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => response.text())
+			.then(data => {
+				resultDiv.innerHTML = data;
+			})
+			.catch(error => {
+				resultDiv.innerHTML = error.message;
+			});
+		});
+	</script>
+</body>
+</html>
